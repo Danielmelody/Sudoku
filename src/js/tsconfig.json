@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": false,
+        "noLib": false
+    },
+     "exclude": [
+       "node_modules",
+       "bower_components",
+       "lib/libFileToExclude.d.ts"
+     ]
+}
