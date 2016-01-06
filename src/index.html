@@ -1,46 +1,68 @@
 <!doctype html>
 <html>
-<!doctype html>
-<html>
 <head>
-  <title>WebGL Demo</title>
+  <title>Suduku</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <link rel="stylesheet" href="css/webgl.css" type="text/css">
-  <script src="js/sylvester.js" type="text/javascript"></script>
-  <script src="js/glUtils.js" type="text/javascript"></script>
-  <script src="js/webgl-demo.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="css/table.css" type="text/css">
+  <link rel="stylesheet" href="css/buttons.css" type="text/css">
+  <style>
+  body {margin:0;}
+  ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #333;
+      position: fixed;
+      top: 0;
+      width: 100%;
+  }
 
-  <!-- Fragment shader program -->
+  li {
+      float: left;
+  }
 
-  <script id="shader-fs" type="x-shader/x-fragment">
-    varying lowp vec4 vColor;
+  li a {
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+  }
 
-    void main(void) {
-      gl_FragColor = vColor;
-    }
-  </script>
+  li a:hover:not(.active) {
+      background-color: #111;
+  }
 
-  <!-- Vertex shader program -->
-
-  <script id="shader-vs" type="x-shader/x-vertex">
-    attribute vec3 aVertexPosition;
-    attribute vec4 aVertexColor;
-
-    uniform mat4 uMVMatrix;
-    uniform mat4 uPMatrix;
-
-    varying lowp vec4 vColor;
-
-    void main(void) {
-      gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-      vColor = aVertexColor;
-    }
-  </script>
+  .active {
+      background-color: #4CAF50;
+  }
+</style>
 </head>
 
-<body onload="start()">
-  <canvas id="glcanvas" width="640" height="480">
-    Your browser doesn't appear to support the <code>&lt;canvas&gt;</code> element.
-  </canvas>
+<body>
+
+    <ul style="top:0px;left:0px;right:0px;position=fixed;">
+          <li><a href="javascript:createSuduke(7)" >Very Easy</a></li>
+          <li><a href="javascript:createSuduke(8)">Easy</a></li>
+          <li><a href="javascript:createSuduke(9)" class="active" >Medium</a></li>
+          <li><a href="javascript:createSuduke(10)">Hard</a></li>
+          <li><a href="javascript:createSuduke(11)">Very Hard</a></li>
+    </ul>
+
+    <div id="remind" align="center" style="margin-top:55px">
+    </div>
+
+    <table class="board" id="board" align="center" style="margin-top:5px;">
+    </table>
+
+    <script src="js/suduku.js" type="text/javascript"></script>
+    <script src="js/board.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    createSuduke(9);
+    </script>
+
+
+
 </body>
 </html>

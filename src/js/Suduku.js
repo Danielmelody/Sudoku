@@ -1,5 +1,5 @@
-var sudukuLogic;
-(function (sudukuLogic) {
+var sudokuLogic;
+(function (sudokuLogic) {
     /** class Sudoku
     * @author yiminghu
     * @language en_US
@@ -20,6 +20,7 @@ var sudukuLogic;
         function Sudoku() {
             this.board = [];
             this.completeFlag = false;
+            this.filledNum = 0;
             for (var i = 0; i < 9; ++i) {
                 var line = [];
                 for (var j = 0; j < 9; ++j) {
@@ -27,8 +28,6 @@ var sudukuLogic;
                 }
                 this.board.push(line);
             }
-            // we fill the first grid of board with a random value from 1-9
-            this.preFill(0, 0, parseInt((81 * Math.random()).toFixed(0)) % 9 + 1);
         }
         /**
         * @author yiminghu
@@ -47,6 +46,10 @@ var sudukuLogic;
             }
             return result;
         };
+        Sudoku.prototype.checkComplete = function () {
+            console.log(this.filledNum);
+            return 81 == this.filledNum;
+        };
         /**
         * @author yiminghu
         * @language en_US
@@ -57,17 +60,23 @@ var sudukuLogic;
             // check if 'value' is feasible in provided row
             for (var i = 0; i < 9; ++i) {
                 if (value == this.board[row][i]) {
-                    return false;
+                    if (column != i) {
+                        return false;
+                    }
                 }
             }
             // check if 'value' is feasible in provided column
             for (var i = 0; i < 9; ++i) {
                 if (value == this.board[i][column]) {
-                    return false;
+                    if (row != i) {
+                        return false;
+                    }
                 }
             }
             // check if 'value' is feasible in specified 3*3 rect
             // get a 3*3 coordinate of the board consisting of 9 3*3 rects;
+            var oriCol = column;
+            var oriRow = row;
             column /= 3;
             row /= 3;
             column = parseInt(column.toString());
@@ -76,11 +85,51 @@ var sudukuLogic;
             for (var i = 0; i < 3; ++i) {
                 for (var j = 0; j < 3; ++j) {
                     if (this.board[3 * row + i][3 * column + j] == value) {
-                        return false;
+                        if (3 * row + i != oriRow && 3 * column + j != oriCol) {
+                            return false;
+                        }
                     }
                 }
             }
             return true;
+        };
+        Sudoku.prototype.solve = function () {
+            this.preFill(0, 0, parseInt((81 * Math.random()).toFixed(0)) % 9 + 1);
+        };
+        Sudoku.prototype.emitSuduku = function (level) {
+            for (var i = 0; i < level; ++i) {
+                var rows = this.getRandomList();
+                var columns = this.getRandomList();
+                for (var j = 0; j < 9; ++j) {
+                    this.board[rows[j] - 1][columns[j] - 1] = 0;
+                }
+            }
+            for (var i = 0; i < 9; ++i) {
+                for (var j = 0; j < 9; ++j) {
+                    if (this.board[i][j] != 0) {
+                        this.filledNum++;
+                    }
+                }
+            }
+        };
+        Sudoku.prototype.getValidList = function (column, row) {
+            var list = [];
+            for (var i = 1; i < 10; ++i) {
+                if (this.check(column, row, i)) {
+                    list.push(i);
+                }
+            }
+            return list;
+        };
+        Sudoku.prototype.fill = function (column, row, value) {
+            console.log(value + ',' + this.board[row][column]);
+            if (this.board[row][column] == 0 && value != 0) {
+                this.filledNum++;
+            }
+            if (this.board[row][column] != 0 && value == 0) {
+                this.filledNum--;
+            }
+            this.board[row][column] = value;
         };
         /**
         * @author yiminghu
@@ -125,10 +174,10 @@ var sudukuLogic;
             if (this.completeFlag) {
                 return;
             }
-            this.board[nextRow][nextColumn] = 0;
+            this.board[row][column] = 0;
             return;
         };
         return Sudoku;
     })();
-    sudukuLogic.Sudoku = Sudoku;
-})(sudukuLogic || (sudukuLogic = {}));
+    sudokuLogic.Sudoku = Sudoku;
+})(sudokuLogic || (sudokuLogic = {}));

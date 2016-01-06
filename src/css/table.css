@@ -1,0 +1,82 @@
+.board {
+    width: 405px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border: 2px dashed #a1a1a1;
+}
+.board tr{
+    width: 53px;
+    height: 53px;
+}
+
+.board td{
+    width: 53px;
+    height: 53px;
+    border: 2px dashed #a1a1a1;
+    text-align: center;
+    border-radius: 0px;
+    background-color: #ccc;
+}
+
+.ans {
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    background-color:#a10000;
+    opacity: 1;
+}
+
+.ans tr{
+    height: 15px;
+}
+
+.ans td{
+    width: 33.3%;
+    height: 33.3%;
+    text-align: center;
+    font-size: 100%;
+    border: 0px dashed #a1a1a1;
+    background-color:#a10000;
+}
+
+
+.ans td:hover{
+  font-size: 100%;
+  border: 0px solid #a1a1a1;
+  background-color: #ff9933;
+  border-radius: 10px;
+  line-height: normal;
+}
+
+.option-invalid td:hover{
+  background-color:#a10000;
+}
+
+.option-text-valid{
+  color: white;
+  font-size: 8px;
+}
+
+.option-text-invalid{
+  color: white
+}
+
+.text-setted{
+  font-size: 30px;
+  color: #a10000;
+}
+
+.text-preset{
+  font-size: 30px;
+  color: #888;
+}
+
+#remind{
+  color: red;
+}
+
+@keyframes myfirst{
+  from {margin-top: 65;}
+  to {background: 100;}
+}
