@@ -17,10 +17,11 @@ function createSuduke(level) {
       var cell = tbody.rows[i].insertCell(j)
       cell.i = i
       cell.j = j
-      cell.value = 0;
+      cell.numValue = 0;
       cell.hasSetted = false
       cell.preSet = false
       cell.selected = false
+      cell.touchCount = 0;
       if (logic.board[i][j] !== 0) {
         cell.preSet = true
         cell.innerHTML = '<a class="text-preset">' + logic.board[i][j] + '</a>'
@@ -46,17 +47,19 @@ function createSuduke(level) {
       }
 
       cell.ongiveup = function () {
-        if (this.selected) {
-          this.selected = false;
+          console.log("call ongiveup");
+          if (this.active) {
+              console.log("active");
           if (lastValue !== undefined) {
-            this.innerHTML = lastValue
-          }
-          if (lastColor !== undefined) {
-              if(this.hasSetted){
-                  this.style.backgroundColor = 'white';
-              }else {
-                  this.style.backgroundColor = '#ccc';
+              if(lastValue == 0){
+                  lastValue = "";
               }
+              this.innerHTML = lastValue;
+          }
+          if(this.hasSetted){
+              this.style.backgroundColor = 'white';
+          }else {
+              this.style.backgroundColor = '#ccc';
           }
         }
       }
@@ -65,26 +68,19 @@ function createSuduke(level) {
         if (this.preSet) {
             return
         }
-        if (!this.selected) {
-            console.log(this.selected);
-          this.selected = true
+        this.touchCount++;
+        if (this.touchCount < 3) {
           if (this !== lastGrid){
               if (lastGrid !== undefined ) {
                 lastGrid.ongiveup(this);
               }
               lastGrid = this;
-              lastValue = this.innerHTML;
+              lastValue = this.numValue;
           }
-
           this.innerHTML = ''
 
-          if (this.hasSetted) {
-            this.style.backgroundColor = '#a10000'
-            this.hasSetted = true
-          } else {
-            this.style.backgroundColor = '#a10000'
-            this.hasSetted = true
-          }
+          this.active = true;
+
           var self = this
           var ansSelector = document.createElement('table')
           ansSelector.setAttribute('class', 'ans')
@@ -99,23 +95,35 @@ function createSuduke(level) {
               if (logic.check(this.j, this.i, 3 * m + n + 1)) {
                 option.setAttribute('class', 'option-valid')
                 var optionValue = 3 * m + n + 1;
-                console.log(this.value);
-                if(this.value == optionValue){
+                console.log(this.numValue);
+                if(this.numValue == optionValue){
                     optionValue = 0;
                 }
                 option.innerHTML = '<a class="option-text-valid">' + optionValue + '</a>'
                 option.onclick = (function () {
                   var cuCell = self
-                  var value = 3 * m + n + 1
+                  var value = optionValue;
                   return function () {
-                    cuCell.innerHTML = '<a class="text-setted">' + value + '</a>';
-                    cuCell.value = value;
+                    if(value == 0){
+                        value = '';
+                        cuCell.hasSetted = false;
+                        cuCell.style.backgroundColor = '#ccc'
+                    }
+                    else{
+                        cuCell.style.backgroundColor = 'white'
+                        cuCell.hasSetted = true;
+                    }
+                    cuCell.innerHTML = value;
+                    cuCell.style.fontSize = '30px'
+                    cuCell.style.color = '#a10000'
+                    cuCell.numValue = value;
+                    lastValue = value;
+                    cuCell.active = false;
+                    cuCell.touchCount++;
                     logic.fill(cuCell.j, cuCell.i, value)
                     if (logic.checkComplete()) {
                       remind.innerHTML = '<h1 class="text-setted">Succeed!</h1>'
                     }
-                    cuCell.style.backgroundColor = 'white'
-                    //cuCell.selected = false
                   }
                 })()
               } else {
@@ -129,6 +137,9 @@ function createSuduke(level) {
             }
           }
           this.appendChild(ansSelector)
+        }
+        else{
+            this.touchCount = 0;
         }
         // cell.onclick =
       }

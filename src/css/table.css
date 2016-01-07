@@ -25,12 +25,8 @@
     table-layout: fixed;
     background-color:#a10000;
     opacity: 1;
+    font-size: 8px;
 }
-
-.ans tr{
-    height: 15px;
-}
-
 .ans td{
     width: 33.3%;
     height: 33.3%;
@@ -46,7 +42,6 @@
   border: 0px solid #a1a1a1;
   background-color: #ff9933;
   border-radius: 10px;
-  line-height: normal;
 }
 
 .option-invalid td:hover{
@@ -60,11 +55,6 @@
 
 .option-text-invalid{
   color: white
-}
-
-.text-setted{
-  font-size: 30px;
-  color: #a10000;
 }
 
 .text-preset{
