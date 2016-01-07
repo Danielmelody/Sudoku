@@ -12,7 +12,6 @@ module sudokuLogic {
     */
     export class Sudoku {
         public board = [];
-
         completeFlag = false;
 
         filledNum: number = 0;
