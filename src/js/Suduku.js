@@ -47,7 +47,6 @@ var sudokuLogic;
             return result;
         };
         Sudoku.prototype.checkComplete = function () {
-            console.log(this.filledNum);
             return 81 == this.filledNum;
         };
         /**
@@ -122,7 +121,6 @@ var sudokuLogic;
             return list;
         };
         Sudoku.prototype.fill = function (column, row, value) {
-            console.log(value + ',' + this.board[row][column]);
             if (this.board[row][column] == 0 && value != 0) {
                 this.filledNum++;
             }

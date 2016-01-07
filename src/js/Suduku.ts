@@ -36,7 +36,6 @@ module sudokuLogic {
         }
 
         public checkComplete() {
-            console.log(this.filledNum);
             return 81 == this.filledNum;
         }
 
@@ -120,7 +119,6 @@ module sudokuLogic {
         }
 
         public fill(column: number, row: number, value) {
-            console.log(value+','+this.board[row][column]);
             if (this.board[row][column] == 0 && value != 0) {
                 this.filledNum++;
             }

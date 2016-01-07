@@ -17,9 +17,10 @@ function createSuduke(level) {
       var cell = tbody.rows[i].insertCell(j)
       cell.i = i
       cell.j = j
+      cell.value = 0;
       cell.hasSetted = false
       cell.preSet = false
-      this.selected = false
+      cell.selected = false
       if (logic.board[i][j] !== 0) {
         cell.preSet = true
         cell.innerHTML = '<a class="text-preset">' + logic.board[i][j] + '</a>'
@@ -27,6 +28,9 @@ function createSuduke(level) {
       } else {
         cell.innerHTML = ''
       }
+
+
+
       cell.onmouseover = function () {
         if (!this.preSet) {
           this.style.backgroundColor = 'white'
@@ -43,27 +47,35 @@ function createSuduke(level) {
 
       cell.ongiveup = function () {
         if (this.selected) {
-          this.selected = false
+          this.selected = false;
           if (lastValue !== undefined) {
             this.innerHTML = lastValue
           }
           if (lastColor !== undefined) {
-            this.style.backgroundColor = lastColor
+              if(this.hasSetted){
+                  this.style.backgroundColor = 'white';
+              }else {
+                  this.style.backgroundColor = '#ccc';
+              }
           }
         }
       }
 
       cell.onclick = function (argument) {
         if (this.preSet) {
-          return
+            return
         }
-        if (!this.selected && lastGrid !== this) {
+        if (!this.selected) {
+            console.log(this.selected);
           this.selected = true
-          if (lastGrid !== undefined) {
-            lastGrid.ongiveup()
+          if (this !== lastGrid){
+              if (lastGrid !== undefined ) {
+                lastGrid.ongiveup(this);
+              }
+              lastGrid = this;
+              lastValue = this.innerHTML;
           }
-          lastValue = this.innerHTML
-          lastGrid = this
+
           this.innerHTML = ''
 
           if (this.hasSetted) {
@@ -86,18 +98,24 @@ function createSuduke(level) {
               var option = ansTbody.rows[m].insertCell(n)
               if (logic.check(this.j, this.i, 3 * m + n + 1)) {
                 option.setAttribute('class', 'option-valid')
-                option.innerHTML = '<a class="option-text-valid">' + (3 * m + n + 1) + '</a>'
+                var optionValue = 3 * m + n + 1;
+                console.log(this.value);
+                if(this.value == optionValue){
+                    optionValue = 0;
+                }
+                option.innerHTML = '<a class="option-text-valid">' + optionValue + '</a>'
                 option.onclick = (function () {
                   var cuCell = self
                   var value = 3 * m + n + 1
                   return function () {
-                    cuCell.innerHTML = '<a class="text-setted">' + value + '</a>'
+                    cuCell.innerHTML = '<a class="text-setted">' + value + '</a>';
+                    cuCell.value = value;
                     logic.fill(cuCell.j, cuCell.i, value)
                     if (logic.checkComplete()) {
                       remind.innerHTML = '<h1 class="text-setted">Succeed!</h1>'
                     }
                     cuCell.style.backgroundColor = 'white'
-                    cuCell.selected = false
+                    //cuCell.selected = false
                   }
                 })()
               } else {
