@@ -166,12 +166,12 @@ var sudokuLogic;
                     this.completeFlag = true;
                     return;
                 }
-                //if reaches this step, reset filled grid with 0 and return back
                 this.preFill(nextColumn, nextRow, next);
             }
             if (this.completeFlag) {
                 return;
             }
+            //if reaches this step, reset filled grid with 0 and return back
             this.board[row][column] = 0;
             return;
         };
